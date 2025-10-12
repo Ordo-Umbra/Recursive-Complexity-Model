@@ -46,4 +46,3 @@ If you use RCM in research or applications, please cite as:
 [Your Name]. (2025). Recursive Complexity Model (RCM): Unifying emergence, causality, and quantum-classical feedback. GitHub. https://github.com/Ordo-Umbra/Recursive-Complexity-Model
 License
 MIT License - open and free for research and development.
-Let me know if you want further customization (badge, logo, extra sections) or if you'd like to see a more expanded Markdown file for a /docs/RCM_Overview.md. This structure will help everyone—from newcomers to experienced researchers—see the full rationale and test results of your model.
