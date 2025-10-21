@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RCM Consensus Engine</title>
+    <style>
+        * { box-sizing: border-box; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+            margin: 0; padding: 20px;
+            background: #f0f2f5;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 100%;
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        textarea {
+            width: 100%;
+            height: 120px;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            resize: vertical;
+        }
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin: 15px 0;
+            flex-wrap: wrap;
+        }
+        button {
+            flex: 1;
+            min-width: 120px;
+            background: #007AFF;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        button:active { background: #0056CC; }
+        button.secondary { background: #6C757D; }
+        .cluster {
+            background: #F8F9FA;
+            margin: 15px 0;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #007AFF;
+        }
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #6C757D;
+        }
+        .value-badge {
+            background: #28A745;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 12px;
+            margin-left: 10px;
+        }
+        @media (max-width: 480px) {
+            .button-group { flex-direction: column; }
+            button { min-width: auto; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧠 RCM Consensus Engine</h1>
+        <p>Enter multiple ideas or perspectives (one per line):</p>
+        
+        <textarea id="inputText" placeholder="Example: 
+AI should be transparent
+Machine learning needs ethics
+Algorithms must be fair
+AI safety is important
+Explainable AI builds trust"></textarea>
+        
+        <div class="button-group">
+            <button onclick="processIdeas()">Find Consensus</button>
+            <button class="secondary" onclick="clearText()">Clear</button>
+            <button class="secondary" onclick="loadExample()">Example</button>
+        </div>
+        
+        <div id="loading" class="loading" style="display: none;">
+            🔄 Analyzing with RCM dynamics...
+        </div>
+        
+        <div id="results"></div>
+    </div>
+
+    <script>
+        class RCMUniverse {
+            constructor(size = 32) {
+                this.size = size;
+                this.field = this.createField();
+                this.alpha = 0.1;
+                this.beta = 0.15;
+                this.G = 0.05;
+                this.iteration = 0;
+            }
+
+            createField() {
+                const field = [];
+                for (let y = 0; y < this.size; y++) {
+                    field[y] = [];
+                    for (let x = 0; x < this.size; x++) {
+                        const noise = (Math.random() - 0.5) * 0.2;
+                        const pattern = Math.sin(x * 0.3) * Math.sin(y * 0.3) * 0.1;
+                        field[y][x] = noise + pattern;
+                    }
+                }
+                return field;
+            }
+
+            gradient(x, y) {
+                const dx = (this.getField(x + 1, y) - this.getField(x - 1, y)) / 2;
+                const dy = (this.getField(x, y + 1) - this.getField(x, y - 1)) / 2;
+                return { dx, dy, magnitude: Math.sqrt(dx * dx + dy * dy) };
+            }
+
+            processingCapacity(x, y) {
+                const grad = this.gradient(x, y);
+                return 1 / (1 + grad.magnitude);
+            }
+
+            sFunctional(x, y) {
+                const grad = this.gradient(x, y);
+                const deltaC = grad.magnitude * grad.magnitude;
+                const kappa = this.processingCapacity(x, y);
+                
+                let deltaI = 0;
+                const center = this.getField(x, y);
+                for (let dy = -1; dy <= 1; dy++) {
+                    for (let dx = -1; dx <= 1; dx++) {
+                        if (dx === 0 && dy === 0) continue;
+                        const neighbor = this.getField(x + dx, y + dy);
+                        deltaI += Math.abs(center - neighbor);
+                    }
+                }
+                deltaI = 1 / (1 + deltaI / 8);
+                
+                return deltaC + (kappa * deltaI);
+            }
+
+            step() {
+                const newField = [];
+                for (let y = 0; y < this.size; y++) {
+                    newField[y] = [];
+                    for (let x = 0; x < this.size; x++) {
+                        const laplacian = this.laplacian(x, y);
+                        const gradSquared = this.gradient(x, y).magnitude ** 2;
+                        const gravitational = -this.G * (this.gradient(x, y).dx + this.gradient(x, y).dy);
+                        const change = this.alpha * laplacian + this.beta * gradSquared + gravitational;
+                        newField[y][x] = this.getField(x, y) + change * 0.1;
+                    }
+                }
+                this.field = newField;
+                this.iteration++;
+                return this.calculateSystemS();
+            }
+
+            calculateSystemS() {
+                let totalS = 0;
+                for (let y = 0; y < this.size; y++) {
+                    for (let x = 0; x < this.size; x++) {
+                        totalS += this.sFunctional(x, y);
+                    }
+                }
+                return totalS / (this.size * this.size);
+            }
+
+            getField(x, y) {
+                const wrappedX = (x + this.size) % this.size;
+                const wrappedY = (y + this.size) % this.size;
+                return this.field[wrappedY][wrappedX];
+            }
+
+            laplacian(x, y) {
+                return (this.getField(x + 1, y) + this.getField(x - 1, y) +
+                        this.getField(x, y + 1) + this.getField(x, y - 1) -
+                        4 * this.getField(x, y));
+            }
+        }
+
+        class RCMSymbol {
+            constructor(x, y, strength = 1.0) {
+                this.x = x;
+                this.y = y;
+                this.strength = strength;
+            }
+        }
+
+        class RCMConsensus {
+            constructor() {
+                this.symbols = [];
+                this.rcm = new RCMUniverse(32);
+            }
+
+            processTexts(texts) {
+                this.symbols = texts.map((text, i) => {
+                    const x = i % this.rcm.size;
+                    const y = Math.floor(i / this.rcm.size);
+                    return new RCMSymbol(x, y, 1.0);
+                });
+
+                for (let step = 0; step < 8; step++) {
+                    this.rcm.step();
+                    this.updateSymbolPositions();
+                }
+
+                return this.clusterSymbols();
+            }
+
+            updateSymbolPositions() {
+                this.symbols.forEach(symbol => {
+                    const currentS = this.rcm.sFunctional(symbol.x, symbol.y);
+                    for (let dx = -1; dx <= 1; dx++) {
+                        for (let dy = -1; dy <= 1; dy++) {
+                            if (dx === 0 && dy === 0) continue;
+                            const newX = (symbol.x + dx + this.rcm.size) % this.rcm.size;
+                            const newY = (symbol.y + dy + this.rcm.size) % this.rcm.size;
+                            const newS = this.rcm.sFunctional(newX, newY);
+                            if (newS > currentS) {
+                                symbol.x = newX;
+                                symbol.y = newY;
+                                return;
+                            }
+                        }
+                    }
+                });
+            }
+
+            clusterSymbols() {
+                const clusters = [];
+                const visited = new Set();
+                
+                this.symbols.forEach((symbol, i) => {
+                    if (visited.has(i)) return;
+                    
+                    const cluster = [symbol];
+                    visited.add(i);
+                    
+                    this.symbols.forEach((other, j) => {
+                        if (visited.has(j)) return;
+                        const dist = Math.hypot(symbol.x - other.x, symbol.y - other.y);
+                        if (dist < 5) {
+                            cluster.push(other);
+                            visited.add(j);
+                        }
+                    });
+                    
+                    if (cluster.length > 0) {
+                        const center = this.calculateClusterCenter(cluster);
+                        const coherence = this.calculateClusterCoherence(cluster);
+                        clusters.push({
+                            symbols: cluster,
+                            center: center,
+                            coherence: coherence
+                        });
+                    }
+                });
+                
+                return clusters;
+            }
+
+            calculateClusterCenter(cluster) {
+                const avgX = cluster.reduce((sum, s) => sum + s.x, 0) / cluster.length;
+                const avgY = cluster.reduce((sum, s) => sum + s.y, 0) / cluster.length;
+                return { x: avgX, y: avgY };
+            }
+
+            calculateClusterCoherence(cluster) {
+                const avgS = cluster.reduce((sum, s) => sum + this.rcm.sFunctional(s.x, s.y), 0) / cluster.length;
+                const variance = cluster.reduce((sum, s) => {
+                    const diff = this.rcm.sFunctional(s.x, s.y) - avgS;
+                    return sum + diff * diff;
+                }, 0) / cluster.length;
+                return 1 / (1 + Math.sqrt(variance));
+            }
+        }
+
+        let currentConsensus = null;
+
+        async function processIdeas() {
+            const input = document.getElementById('inputText').value;
+            const ideas = input.split('
+')
+                .filter(line => line.trim().length > 0)
+                .map(line => line.trim());
+            
+            if (ideas.length === 0) {
+                alert('Please enter some ideas first!');
+                return;
+            }
+
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('results').innerHTML = '';
+            
+            await new Promise(resolve => setTimeout(resolve, 100));
+            
+            try {
+                currentConsensus = new RCMConsensus();
+                const clusters = currentConsensus.processTexts(ideas);
+                displayResults(clusters, ideas);
+            } catch (error) {
+                document.getElementById('results').innerHTML = 
+                    '<p>Error processing ideas. Please try again.</p>';
+            }
+            
+            document.getElementById('loading').style.display = 'none';
+        }
+
+        function displayResults(clusters, originalIdeas) {
+            const resultsDiv = document.getElementById('results');
+            
+            if (clusters.length === 0) {
+                resultsDiv.innerHTML = '<p>No clear patterns found. Try more diverse ideas.</p>';
+                return;
+            }
+            
+            let html = `<h2>🧩 Found ${clusters.length} Consensus Patterns</h2>`;
+            
+            clusters.sort((a, b) => 
+                (b.coherence * b.symbols.length) - (a.coherence * a.symbols.length)
+            );
+            
+            clusters.forEach((cluster, index) => {
+                const valueScore = (cluster.coherence * cluster.symbols.length).toFixed(1);
+                const coherencePercent = Math.round(cluster.coherence * 100);
+                
+                html += `
+                    <div class="cluster">
+                        <h3>Pattern ${index + 1} 
+                            <span class="value-badge">Value: ${valueScore}</span>
+                        </h3>
+                        <div style="background: #E9ECEF; height: 8px; border-radius: 4px; margin: 8px 0;">
+                            <div style="background: #28A745; height: 100%; width: ${coherencePercent}%; border-radius: 4px;"></div>
+                        </div>
+                        <p><strong>Coherence:</strong> ${coherencePercent}% | <strong>Ideas:</strong> ${cluster.symbols.length}</p>
+                        <ul style="margin: 0; padding-left: 20px;">
+                `;
+                
+                cluster.symbols.forEach(symbol => {
+                    const ideaIndex = Math.floor(symbol.y * 32 + symbol.x) % originalIdeas.length;
+                    html += `<li>${originalIdeas[ideaIndex]}</li>`;
+                });
+                
+                html += `</ul></div>`;
+            });
+            
+            const totalIdeas = originalIdeas.length;
+            const avgCoherence = clusters.reduce((sum, c) => sum + c.coherence, 0) / clusters.length;
+            
+            html += `
+                <div style="background: #FFF3CD; padding: 15px; border-radius: 8px; margin-top: 20px; border-left: 4px solid #FFC107;">
+                    <h3>💡 RCM Insights</h3>
+                    <p><strong>Overall Analysis:</strong> ${totalIdeas} ideas formed ${clusters.length} natural groups.</p>
+                    <p><strong>Average Coherence:</strong> ${Math.round(avgCoherence * 100)}%</p>
+                    <p><strong>System S-value:</strong> ${currentConsensus.rcm.calculateSystemS().toFixed(3)}</p>
+                    <p><em>Powered by Recursive Complexity Model (RCM) dynamics</em></p>
+                </div>
+            `;
+            
+            resultsDiv.innerHTML = html;
+        }
+
+        function clearText() {
+            document.getElementById('inputText').value = '';
+            document.getElementById('results').innerHTML = '';
+        }
+
+        function loadExample() {
+            const examples = [
+                "Artificial intelligence should prioritize human safety",
+                "AI systems need transparent decision-making processes",
+                "Machine learning models must be fair and unbiased",
+                "Ethical AI requires value alignment with human goals",
+                "Explainable AI builds trust and understanding",
+                "AI governance should involve diverse perspectives",
+                "Responsible AI development includes impact assessments",
+                "AI systems should be robust and reliable",
+                "Privacy protection is essential in AI applications",
+                "Human oversight maintains AI accountability"
+            ];
+            document.getElementById('inputText').value = examples.join('
+');
+        }
+    </script>
+</body>
+</html>
