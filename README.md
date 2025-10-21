@@ -1,48 +1,54 @@
-Recursive Complexity Model (RCM): A Unified Framework for Emergence, Causality, and Quantum-Classical Transitions
-Overview
-RCM (Recursive Complexity Model) is a novel, empirically validated theoretical framework that unifies the emergence of complexity, causality, symbolic agency, and quantum-classical transition. It is anchored in both mathematical theorems and reproducible simulation code, with wide-ranging implications for physics, computation, and multi-agent systems.
-Core Principle
-The dynamics of any field or substrate maximize a generalized complexity functional
-$$ \mathcal{L} = [C] - \lambda [I] + \kappa $$
-where $[C]$ measures field complexity, $[I]$ is mutual information, and $[\kappa]$ scales processing capacity.
-Key Features
-Emergent Causality: Proven by the Causality Protection Theorem (CPT) and validated by maximal speed of information propagation $c = \sqrt{\alpha}$.
-Symbolic and Informational Structure: Via persistent high-MI regions (landmarks, agents, cognitive analogs).
-Quantum Feedback & Self-Classicalization: Via agent-environment interaction; proven "collapse" from coherence to pointer state attractors when actions are penalized adaptively.
-Universal Applicability: Recursion, causality, and normativity extend from physics to biology, cognition, and society.
-Falsifiability: All claims are reproduced in Python/Colab notebooks and can be tested/extended by others.
-Analytic Results
-Maximal Propagation Speed: Validated by parameter sweeps in simulation (see /notebooks).
-Causality Protection Theorem (CPT): No closed timelike curves persist in RCM; causal, complexity-increasing trajectories are dynamically selected. All nontrivial regressions collapse or are suppressed.
-Persistence Invariant: Stability and normativity emerge:
-Systems ought to maximize coherent complexity ($\frac{dS}{dt} > 0$).
-Actions violating causality/integrity collapse early.
-Cooperative, mutual-information-rich networks persist longer.
-Quickstart
-Clone the repo and open /notebooks/RCM_Physics_Quantum_Demo.ipynb in Google Colab.
-Run all cells to reproduce:
-Phase diagrams
-Complexity/dynamics plots
-Quantum feedback transitions
-Action bias/persistence
-Symbolic emergence metrics
-The main notebook includes:
-Analytic derivations & code for maximum velocity
-Agent/field recursive evolution
-Quantum feedback self-classicalization sweep
-Symbol tracker and information landscape visualization
-Example: Quantum Feedback Results
-�
-Figure: Decoherence feedback forces rapid transition to classical pointer state, as measured by complexity $S(t)$, action bias, and persistence.
-Documentation
-/docs/RCM_Overview.md: Full theoretical background, analytic proofs, and cross-domain generalization (including "ought-from-is" ethics derivation).
-/notebooks: Working Colab/Jupyter simulations for physics, quantum, and symbolic analysis.
-/results: Key output plots and tables for easy comparison to theory.
-Community & Contributing
-Open to collaboration, feedback, issues, and ideas!
-Please use Issues or Discussions for suggestions, bug reports, or theory extensions.
+Mini RCM Reasoning Agent
+
+The Mini Recursive Complexity Model (RCM) Reasoning Agent is a lightweight prototype that operationalizes the S‑functional in a discrete‑time reasoning loop. It is designed as both a demonstration module and a sandbox for experimentation, showing how recursive complexity maximization can drive symbolic reasoning in a minimal substrate.
+
+🔑 Core Principle
+At each step, the agent maximizes the functional:
+
+\[
+S(\phi{t+1} \mid \phit) = \Delta C(\phi{t+1}, \phit) + \kappa \cdot \Delta I(\phi{t+1}, \phit)
+\]
+
+- ΔC → change in structural complexity (entropy + graph edges)  
+- ΔI → change in mutual information across active relations  
+- κ → adaptive trade‑off between exploration and coherence  
+
+This ensures the agent avoids trivial equilibria (pure order) and chaotic divergence (pure noise).
+
+🧠 State Representation
+- Belief vector \(\mathbf{v} \in [0,1]^d\): soft activations over \(d\) atoms  
+- Adjacency graph \(A\): sparse binary edges encoding semantic relations  
+- Initialization: uniform priors, self‑loops only  
+
+This hybrid structure allows both propositional and relational reasoning.
+
+🔄 Reasoning Loop
+1. Propose candidate actions (perturb activations, toggle edges, merge nodes, inject noise).  
+2. Evaluate ΔC and ΔI for each candidate.  
+3. Select action maximizing \(S\).  
+4. Classicalization step: snap near‑binary beliefs to 0/1, pruning unstable edges.  
+5. Iterate until ΔS stabilizes or a step limit is reached.  
+
+The loop converges to local optima, with optional annealing for global search.
+
+📊 Outputs
+- Inference layer: top‑scoring beliefs by κ‑weighted coherence  
+- Trace log: \(\{t, St, \Delta Ct, \Delta I_t\}\) for replay and analysis  
+- Visualization: evolving belief graph (nodes + edges) and ΔC/ΔI trajectories  
+
+🎯 Purpose
+- Demonstration: Shows how RCM principles can be embodied in a minimal agent running in a browser.  
+- Research testbed: Provides a falsifiable, extensible substrate for experimenting with motif overlays, symbolic persistence, and cognitive dynamics.  
+- Educational bridge: Makes the abstract mathematics of RCM tangible for contributors and students.  
+
+---
+
+👉 Suggested next step: host this agent as a GitHub Pages demo so visitors can interactively watch the reasoning loop evolve. This would make the README not just a theoretical entry point, but a live window into recursive complexity in action.
+
+
+
 Citation
 If you use RCM in research or applications, please cite as:
-[Your Name]. (2025). Recursive Complexity Model (RCM): Unifying emergence, causality, and quantum-classical feedback. GitHub. https://github.com/Ordo-Umbra/Recursive-Complexity-Model
+[Devon Birch]. (2025). Recursive Complexity Model (RCM): Unifying emergence, causality, and quantum-classical feedback. GitHub. https://github.com/Ordo-Umbra/Recursive-Complexity-Model
 License
 MIT License - open and free for research and development.
