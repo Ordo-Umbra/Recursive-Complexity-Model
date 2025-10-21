@@ -51,20 +51,7 @@ Live demos (HTML)
 - Direct GitHub Pages links (if Pages is enabled for this repository and serving from the default branch root):
   - Minimal RCM Agent demo: https://ordo-umbra.github.io/Recursive-Complexity-Model/Minimal-Agent.html
   - RCM Consensus Engine demo: https://ordo-umbra.github.io/Recursive-Complexity-Model/consensus.html
-
-How to enable GitHub Pages (quick steps)
-1. In your repository, go to Settings → Pages.
-2. Under "Build and deployment", select the branch you want to serve from (commonly `main`) and the root folder ("/").
-3. Save. GitHub will publish your site at `https://<your-username>.github.io/<repository-name>/`.
-4. Visit the URLs above (or the repository-relative file paths) to confirm the pages render.
-
-Notes and troubleshooting
-- If the pages 404, check that:
-  - Pages is enabled and configured to serve from the branch containing the HTML files.
-  - The HTML files are at the repository root or the path you've configured.
-  - There are no filename/branch capitalization mismatches.
-- I found these HTML files in the repo: `Minimal-Agent.html` and `consensus.html`. Search results may be incomplete; view a code search for `.html` files here:
-  https://github.com/Ordo-Umbra/Recursive-Complexity-Model/search?q=extension%3Ahtml&type=code
+https://github.com/Ordo-Umbra/Recursive-Complexity-Model/blob/main/RCM_Agent.ipynb
 
 Citation
 If you use RCM in research or applications, please cite as:
