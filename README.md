@@ -9,7 +9,6 @@ Comprehensive presentation of the model, including derivations of the Standard M
 📄 RCM Lagrangian & Empirical Roadmap
 Formalized Lagrangian derivation, gauge symmetries, fermion generations, and testable predictions.
 
-Umbra/Recursive-Complexity-Model/blob/main/RCM_Agent.ipynb
 
 Citation
 If you use RCM in research or applications, please cite as:
